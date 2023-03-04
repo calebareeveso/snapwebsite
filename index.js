@@ -1,27 +1,19 @@
-/*
- Website screenshot API using ExpressJS + playwright + sharp. Built for caleb.fun
-*/
-const express = require("express");
-const { chromium } = require("playwright");
+const express = require("express"),
+  app = express(),
+  puppeteer = require("puppeteer");
 const sharp = require("sharp");
-
-app = express();
-
 app.get("/", async (request, response) => {
   try {
-    // Launch chromium
-    let browser = await chromium.launch();
+    const browser = await puppeteer.launch({
+      args: ["--no-sandbox"],
+    });
     const page = await browser.newPage();
-
     //Set View port
-    await page.setViewportSize({ width: 1280, height: 720 });
-
+    await page.setViewport({ width: 1280, height: 720 });
     // Read url query parameter.
     await page.goto(request.query.url);
-
     // Take snapshot
     const snapshot = await page.screenshot();
-
     // Close browser
     await browser.close();
 
@@ -36,8 +28,7 @@ app.get("/", async (request, response) => {
     response.send(buffer.toString("base64"));
   } catch (error) {
     response.send({ error: error.message });
-    console.log("------------------------");
-    console.log({ error: error.message });
+    console.log(error);
   }
 });
 
