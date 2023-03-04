@@ -1,6 +1,12 @@
 const express = require("express"),
   app = express(),
   puppeteer = require("puppeteer");
+const cors = require("cors");
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.get("/", async (request, response) => {
   if (request.query.url == undefined) {
     response.setHeader("content-type", "text/plain");
@@ -16,7 +22,7 @@ app.get("/", async (request, response) => {
         width: 1280,
         height: 1280,
         deviceScaleFactor: 0.2,
-      }); // old height: 720
+      });
 
       // Page Load Options
       const pageLoadOptions = {
@@ -35,8 +41,7 @@ app.get("/", async (request, response) => {
 
       // Send response
       console.log(`Snapped: ${request.query.url}`);
-      response.setHeader("content-type", "text/plain");
-      response.send(b64string);
+      response.json({ b64string });
     } catch (error) {
       response.send({ error: error.message });
       console.log(error);
