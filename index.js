@@ -12,7 +12,7 @@ app.get("/", async (request, response) => {
       });
       const page = await browser.newPage();
       //Set View port
-      await page.setViewport({ width: 1280, height: 720 });
+      await page.setViewport({ width: 1280, height: 1280 }); // old height: 720
 
       // Page Load Options
       const pageLoadOptions = {
