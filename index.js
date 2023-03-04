@@ -35,7 +35,9 @@ app.get("/", async (request, response) => {
     response.setHeader("content-type", "text/plain");
     response.send(buffer.toString("base64"));
   } catch (error) {
-    response.send(error);
+    response.send({ error: error.message });
+    console.log("------------------------");
+    console.log({ error: error.message });
   }
 });
 
